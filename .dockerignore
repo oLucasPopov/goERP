@@ -1,0 +1,8 @@
+.dockerfile
+.git/
+.gitignore
+.dockerignore
+goERP/.idea
+build
+log.txt
+migration.bat

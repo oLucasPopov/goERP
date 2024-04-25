@@ -1,0 +1,20 @@
+CREATE TABLE funcionarios (
+	id serial4 NOT NULL,
+	nome varchar(256) NULL,
+	cpf_cnpj varchar(14) NOT NULL DEFAULT ''::character varying,
+	telefone varchar(11) NOT NULL DEFAULT ''::character varying,
+	celular varchar(11) NOT NULL DEFAULT ''::character varying,
+	email varchar(256) NOT NULL DEFAULT ''::character varying,
+	observacoes varchar(1024) NOT NULL DEFAULT ''::character varying,
+	id_estado int4 NULL,
+	id_cidade int4 NULL,
+	cep varchar(8) NOT NULL DEFAULT ''::character varying,
+	rua varchar(256) NOT NULL DEFAULT ''::character varying,
+	numero varchar(5) NOT NULL DEFAULT ''::character varying,
+	bairro varchar(128) NOT NULL DEFAULT ''::character varying,
+	referencia varchar(128) NOT NULL DEFAULT ''::character varying,
+	tipo_salario bpchar(1) NULL,
+	salario numeric(18, 2) NOT NULL,
+	CONSTRAINT funcionarios_id_key PRIMARY KEY (id),
+	CONSTRAINT funcionarios_tipo_salario_check CHECK ((tipo_salario = ANY (ARRAY['H'::bpchar, 'M'::bpchar])))
+);

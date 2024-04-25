@@ -1,0 +1,20 @@
+CREATE TABLE clientes (
+	id serial4 NOT NULL,
+	nome_fantasia varchar(256) NULL,
+	razao_social varchar(256) NULL,
+	cpf_cnpj varchar(14) NULL,
+	telefone varchar(11) NULL,
+	celular varchar(11) NULL,
+	email varchar(256) NULL,
+	observacoes varchar(1024) NULL,
+	id_estado int4 NULL,
+	id_cidade int4 NULL,
+	cep varchar(8) NULL,
+	rua varchar(256) NULL,
+	numero varchar(5) NULL,
+	bairro varchar(128) NULL,
+	referencia varchar(128) NULL,
+	tp_codigo int4 NULL,
+	CONSTRAINT clientes_id_key PRIMARY KEY (id),
+	CONSTRAINT fk_tp_codigo FOREIGN KEY (tp_codigo) REFERENCES tabelas_preco(id)
+);

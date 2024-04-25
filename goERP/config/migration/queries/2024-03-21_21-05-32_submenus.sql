@@ -1,0 +1,23 @@
+CREATE TABLE vendas (
+	id serial4 NOT NULL,
+	data_inclusao timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	data_alteracao timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	cli_codigo int4 NOT NULL,
+	data_venda date NULL,
+	data_hora_agendada timestamp NULL,
+	total_bruto numeric(18, 2) NOT NULL DEFAULT 0,
+	acrescimo_total numeric(18, 4) NOT NULL DEFAULT 0,
+	desconto_total numeric(18, 4) NOT NULL DEFAULT 0,
+	taxa_entrega numeric(18, 4) NOT NULL DEFAULT 0,
+	venda_finalizada bool NOT NULL DEFAULT false,
+	total_liquido numeric(18, 2) NULL GENERATED ALWAYS AS ((total_bruto + acrescimo_total - desconto_total + taxa_entrega)) STORED,
+	tp_codigo int4 NULL,
+	tipo_venda bpchar(1) NOT NULL DEFAULT 'V'::bpchar,
+	tipo_entrega bpchar(1) NOT NULL DEFAULT 'R'::bpchar,
+	ev_codigo int4 NOT NULL DEFAULT 1,
+	motivo_cancelamento varchar(1024) NULL,
+	CONSTRAINT vendas_id_key PRIMARY KEY (id),
+	CONSTRAINT fk_tp_codigo FOREIGN KEY (tp_codigo) REFERENCES tabelas_preco(id),
+	CONSTRAINT vendas_cli_codigo_fkey FOREIGN KEY (cli_codigo) REFERENCES clientes(id),
+	CONSTRAINT vendas_ev_codigo_fkey FOREIGN KEY (ev_codigo) REFERENCES etapas_venda(id)
+);

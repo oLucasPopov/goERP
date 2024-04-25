@@ -1,0 +1,1 @@
+docker compose down backend -v && docker compose up backend --build -d

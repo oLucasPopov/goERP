@@ -1,0 +1,75 @@
+version: '3'
+
+networks:
+  main:
+    driver: bridge
+
+volumes:
+  postgres:
+  backend:
+
+services:
+
+  # Cria banco de dados Postgres
+  pgdb:
+    container_name: pgdb
+
+    #Pega a última versão do PG
+    image: postgres:latest
+
+    #Volumes que o container irá utilizar/enxergar
+    volumes:
+      - postgres:/var/lib/postgresql/data
+      - ./sql:/docker-entrypoint-initdb.d
+    expose:
+      - 5432
+    restart: always
+    env_file:
+      - ./.env
+
+    # Define as redes que o container utilizará
+    networks:
+      - main
+
+    # Variáveis de Ambiente carregadas através do .env
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_PORT=${DB_PORT}
+      - POSTGRES_HOST_AUTH_METHOD=trust
+
+    # Porta externa:interna
+    ports:
+      - "5433:5432"
+
+  backend:
+    container_name: goERP
+    networks:
+      - main
+    build:
+      # context: pasta com que o container trabalhará
+      context: ./goERP
+
+      # dockerfile: passo-a-passo para compilar a aplicação
+      dockerfile: Dockerfile
+
+    # volumes do disco (linux) que a aplicação trabalhará
+    volumes:
+      - backend:/app/public
+
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_PORT=${DB_PORT}
+      - DB_HOST=${DB_HOST}
+    env_file:
+      - ./.env
+    restart: always
+    depends_on:
+      - pgdb
+    expose:
+      - 8080
+    ports:
+      - "8080:8080"

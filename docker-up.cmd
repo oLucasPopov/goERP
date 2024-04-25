@@ -1,0 +1,1 @@
+docker compose -f docker-compose.yaml -p erp up -d --build
